@@ -1,0 +1,1468 @@
+package com.sample
+ 
+import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.JPanel;
+import javax.swing.*;
+
+declare Question
+	question : String @key
+end
+	
+declare Answer
+	question : Question @key
+	answer : String @key
+end
+
+  
+function String ask(String question, Object[] options) {
+		int n=-1;
+		while(n ==-1){
+			n= JOptionPane.showOptionDialog(null,
+		    question,
+		    "Question",
+		    JOptionPane.YES_NO_OPTION, 
+		    JOptionPane.QUESTION_MESSAGE,
+		    null,
+		    options,
+		    options[0]);
+		}
+    return options[n].toString();
+}
+
+ rule "init"
+ 	when
+ 	then
+ 		insert(new Question("What is the gender of the person receiving your gift?"));
+ end
+ 
+rule "What is the gender of the person receiving your gift?"
+    when
+      q: Question(quest:question, question.equals("What is the gender of the person receiving your gift?"))
+   then
+       Object[] options = { "Male", "Female"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "What is the gender of the person receiving your gift? answer: Male"
+    when
+      a: Answer( question.question.equals("What is the gender of the person receiving your gift?"), answer.equals("Male"))
+    then
+      insert(new Question("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"));
+end
+
+
+rule "What is the gender of the person receiving your gift? answer: Female"
+    when
+      a: Answer( question.question.equals("What is the gender of the person receiving your gift?"), answer.equals("Female"))
+    then
+      insert(new Question("Let-s face it, you are i trouble. Why are you buying her a gitft?"));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"
+    when
+      q: Question(quest:question, question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"))
+   then
+       Object[] options = { "Dad", "Brother", "Crazy Uncle Charlie", "Co-Worker", "Father-in-law"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift? answer: Dad"
+    when
+      a: Answer( question.question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"), answer.equals("Dad"))
+    then
+      insert(new Question("What did you get him last holiday season?"));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift? answer: Brother"
+    when
+      a: Answer( question.question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"), answer.equals("Brother"))
+    then
+      insert(new Question("Your brother is older or younger ?"));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift? answer: Crazy Uncle Charlie"
+    when
+      a: Answer( question.question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"), answer.equals("Crazy Uncle Charlie"))
+    then
+      insert(new Question("Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift? answer: Co-Worker"
+    when
+      a: Answer( question.question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"), answer.equals("Co-Worker"))
+    then
+      insert(new Question("Is this person your boss?"));
+end
+
+
+rule "This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift? answer: Father-in-law"
+    when
+      a: Answer( question.question.equals("This is gonna be hard. Guys's don'n buy gifts for other guys. Why are you buying him a gift?"), answer.equals("Father-in-law"))
+    then
+      insert(new Question("Face it, you'll newer be good enough for his daughter. You best chance of redeeming yourself would be to get him a Holiday 4-Pack"));
+end
+
+
+rule "Face it, you'll newer be good enough for his daughter. You best chance of redeeming yourself would be to get him a Holiday 4-Pack"
+    when
+      q: Question(quest:question, question.equals("Face it, you'll newer be good enough for his daughter. You best chance of redeeming yourself would be to get him a Holiday 4-Pack"))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Face it, you'll newer be good enough for his daughter. You best chance of redeeming yourself would be to get him a Holiday 4-Pack answer: Done"
+    when
+      a: Answer( question.question.equals("Face it, you'll newer be good enough for his daughter. You best chance of redeeming yourself would be to get him a Holiday 4-Pack"), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "What did you get him last holiday season?"
+    when
+      q: Question(quest:question, question.equals("What did you get him last holiday season?"))
+   then
+       Object[] options = { "A tie", "Power tools", "A mug that says World's#1 Dad", "A new grill"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "What did you get him last holiday season? answer: A tie"
+    when
+      a: Answer( question.question.equals("What did you get him last holiday season?"), answer.equals("A tie"))
+    then
+      insert(new Question("How original... how many ties does he own now?"));
+end
+
+
+rule "What did you get him last holiday season? answer: Power tools"
+    when
+      a: Answer( question.question.equals("What did you get him last holiday season?"), answer.equals("Power tools"))
+    then
+      insert(new Question("So dad is pretty handy huh?"));
+end
+
+
+rule "What did you get him last holiday season? answer: A mug that says World's#1 Dad"
+    when
+      a: Answer( question.question.equals("What did you get him last holiday season?"), answer.equals("A mug that says World's#1 Dad"))
+    then
+      insert(new Question("And does he actually use this mug?"));
+end
+
+
+rule "What did you get him last holiday season? answer: A new grill"
+    when
+      a: Answer( question.question.equals("What did you get him last holiday season?"), answer.equals("A new grill"))
+    then
+      insert(new Question("Was he so excited to test out the new grill right away that almost started the house on fire?"));
+end
+
+
+rule "How original... how many ties does he own now?"
+    when
+      q: Question(quest:question, question.equals("How original... how many ties does he own now?"))
+   then
+       Object[] options = { ">75", "<75 but >30"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "How original... how many ties does he own now? answer: >75"
+    when
+      a: Answer( question.question.equals("How original... how many ties does he own now?"), answer.equals(">75"))
+    then
+      insert(new Question("I think you can skip a year of the ties. How about this year you get him a gift that won't end up thrown in the back of closet? Like a Holiday 4-Pack."));
+end
+
+
+rule "How original... how many ties does he own now? answer: <75 but >30"
+    when
+      a: Answer( question.question.equals("How original... how many ties does he own now?"), answer.equals("<75 but >30"))
+    then
+      insert(new Question("I know you are worried that Dad needs another tie, but if he can go an entire month without wearing the same tie twice I think he is ok on ties. Let's go with a Holiday 4-Pack this year."));
+end
+
+
+rule "I think you can skip a year of the ties. How about this year you get him a gift that won't end up thrown in the back of closet? Like a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("I think you can skip a year of the ties. How about this year you get him a gift that won't end up thrown in the back of closet? Like a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "I think you can skip a year of the ties. How about this year you get him a gift that won't end up thrown in the back of closet? Like a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("I think you can skip a year of the ties. How about this year you get him a gift that won't end up thrown in the back of closet? Like a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "I know you are worried that Dad needs another tie, but if he can go an entire month without wearing the same tie twice I think he is ok on ties. Let's go with a Holiday 4-Pack this year."
+    when
+      q: Question(quest:question, question.equals("I know you are worried that Dad needs another tie, but if he can go an entire month without wearing the same tie twice I think he is ok on ties. Let's go with a Holiday 4-Pack this year."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "I know you are worried that Dad needs another tie, but if he can go an entire month without wearing the same tie twice I think he is ok on ties. Let's go with a Holiday 4-Pack this year. answer: Done"
+    when
+      a: Answer( question.question.equals("I know you are worried that Dad needs another tie, but if he can go an entire month without wearing the same tie twice I think he is ok on ties. Let's go with a Holiday 4-Pack this year."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "So dad is pretty handy huh?"
+    when
+      q: Question(quest:question, question.equals("So dad is pretty handy huh?"))
+   then
+       Object[] options = { "Yes", "No, he just thinks he is. In reality, he just ends up making thins worse when he tried to fix them."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "So dad is pretty handy huh? answer: Yes"
+    when
+      a: Answer( question.question.equals("So dad is pretty handy huh?"), answer.equals("Yes"))
+    then
+      insert(new Question("Then he already has all the tools he needs. Get him a Holiday $-pack instead."));
+end
+
+
+rule "So dad is pretty handy huh? answer: No, he just thinks he is. In reality, he just ends up making thins worse when he tried to fix them."
+    when
+      a: Answer( question.question.equals("So dad is pretty handy huh?"), answer.equals("No, he just thinks he is. In reality, he just ends up making thins worse when he tried to fix them."))
+    then
+      insert(new Question("Stop enabling this behavior and get him a Holiday 4-Pack this year."));
+end
+
+
+rule "Then he already has all the tools he needs. Get him a Holiday $-pack instead."
+    when
+      q: Question(quest:question, question.equals("Then he already has all the tools he needs. Get him a Holiday $-pack instead."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Then he already has all the tools he needs. Get him a Holiday $-pack instead. answer: Done"
+    when
+      a: Answer( question.question.equals("Then he already has all the tools he needs. Get him a Holiday $-pack instead."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Stop enabling this behavior and get him a Holiday 4-Pack this year."
+    when
+      q: Question(quest:question, question.equals("Stop enabling this behavior and get him a Holiday 4-Pack this year."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Stop enabling this behavior and get him a Holiday 4-Pack this year. answer: Done"
+    when
+      a: Answer( question.question.equals("Stop enabling this behavior and get him a Holiday 4-Pack this year."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "And does he actually use this mug?"
+    when
+      q: Question(quest:question, question.equals("And does he actually use this mug?"))
+   then
+       Object[] options = { "Yes, that's the problem. He takes it everywhere and it's super embarrassing.", "No, I don't know why I even bother getting him gifts if he's not going to use them anyway."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "And does he actually use this mug? answer: Yes, that's the problem. He takes it everywhere and it's super embarrassing."
+    when
+      a: Answer( question.question.equals("And does he actually use this mug?"), answer.equals("Yes, that's the problem. He takes it everywhere and it's super embarrassing."))
+    then
+      insert(new Question("Here's what you do: accidentally drop he mug and get him a Holiday 4-Pack to make up for your clumsiness."));
+end
+
+
+rule "And does he actually use this mug? answer: No, I don't know why I even bother getting him gifts if he's not going to use them anyway."
+    when
+      a: Answer( question.question.equals("And does he actually use this mug?"), answer.equals("No, I don't know why I even bother getting him gifts if he's not going to use them anyway."))
+    then
+      insert(new Question("Then get him a gift he will actually use... like a Holiday 4-Pack."));
+end
+
+
+rule "Here's what you do: accidentally drop he mug and get him a Holiday 4-Pack to make up for your clumsiness."
+    when
+      q: Question(quest:question, question.equals("Here's what you do: accidentally drop he mug and get him a Holiday 4-Pack to make up for your clumsiness."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Here's what you do: accidentally drop he mug and get him a Holiday 4-Pack to make up for your clumsiness. answer: Done"
+    when
+      a: Answer( question.question.equals("Here's what you do: accidentally drop he mug and get him a Holiday 4-Pack to make up for your clumsiness."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Then get him a gift he will actually use... like a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("Then get him a gift he will actually use... like a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Then get him a gift he will actually use... like a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("Then get him a gift he will actually use... like a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Was he so excited to test out the new grill right away that almost started the house on fire?"
+    when
+      q: Question(quest:question, question.equals("Was he so excited to test out the new grill right away that almost started the house on fire?"))
+   then
+       Object[] options = { "Yes, that is exactly what is happened.", "No... he actually did start the house on fire."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Was he so excited to test out the new grill right away that almost started the house on fire? answer: Yes, that is exactly what is happened."
+    when
+      a: Answer( question.question.equals("Was he so excited to test out the new grill right away that almost started the house on fire?"), answer.equals("Yes, that is exactly what is happened."))
+    then
+      insert(new Question("For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack."));
+end
+
+
+rule "Was he so excited to test out the new grill right away that almost started the house on fire? answer: No... he actually did start the house on fire."
+    when
+      a: Answer( question.question.equals("Was he so excited to test out the new grill right away that almost started the house on fire?"), answer.equals("No... he actually did start the house on fire."))
+    then
+      insert(new Question("For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack."));
+end
+
+
+rule "For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("For the rest of the family's safety you need to get him a gift that is not a fire hazard... like a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Your brother is older or younger ?"
+    when
+      q: Question(quest:question, question.equals("Your brother is older or younger ?"))
+   then
+       Object[] options = { "Younger", "Older"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Your brother is older or younger ? answer: Younger"
+    when
+      a: Answer( question.question.equals("Your brother is older or younger ?"), answer.equals("Younger"))
+    then
+      insert(new Question("So you probably picked on him when you were growing up?"));
+end
+
+
+rule "Your brother is older or younger ? answer: Older"
+    when
+      a: Answer( question.question.equals("Your brother is older or younger ?"), answer.equals("Older"))
+    then
+      insert(new Question("So he probably picked on you when were growing up?"));
+end
+
+
+rule "So you probably picked on him when you were growing up?"
+    when
+      q: Question(quest:question, question.equals("So you probably picked on him when you were growing up?"))
+   then
+       Object[] options = { "Yeah, sure did", "No, never!"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "So you probably picked on him when you were growing up? answer: Yeah, sure did"
+    when
+      a: Answer( question.question.equals("So you probably picked on him when you were growing up?"), answer.equals("Yeah, sure did"))
+    then
+      insert(new Question("Show him how much you've grown and make amends for your adolescent bullying by getting him a Holiday 4-Pack."));
+end
+
+
+rule "So you probably picked on him when you were growing up? answer: No, never!"
+    when
+      a: Answer( question.question.equals("So you probably picked on him when you were growing up?"), answer.equals("No, never!"))
+    then
+      insert(new Question("You are the best older brother ever. You have probably already bought him multiple Holiday 4-Pack."));
+end
+
+
+rule "Show him how much you've grown and make amends for your adolescent bullying by getting him a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("Show him how much you've grown and make amends for your adolescent bullying by getting him a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Show him how much you've grown and make amends for your adolescent bullying by getting him a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("Show him how much you've grown and make amends for your adolescent bullying by getting him a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "You are the best older brother ever. You have probably already bought him multiple Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("You are the best older brother ever. You have probably already bought him multiple Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "You are the best older brother ever. You have probably already bought him multiple Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("You are the best older brother ever. You have probably already bought him multiple Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "So he probably picked on you when were growing up?"
+    when
+      q: Question(quest:question, question.equals("So he probably picked on you when were growing up?"))
+   then
+       Object[] options = { "He was a master of the noogie.", "No, never!"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "So he probably picked on you when were growing up? answer: He was a master of the noogie."
+    when
+      a: Answer( question.question.equals("So he probably picked on you when were growing up?"), answer.equals("He was a master of the noogie."))
+    then
+      insert(new Question("Here's what you do: get him a Holiday 4-Pack, then get yourself a 10-Pack and passive-aggressively demonstrate your newfound superiority."));
+end
+
+
+rule "So he probably picked on you when were growing up? answer: No, never!"
+    when
+      a: Answer( question.question.equals("So he probably picked on you when were growing up?"), answer.equals("No, never!"))
+    then
+      insert(new Question("You have the best older brother ever! Get a pair of Holiday 4-Packs and enjoy some quality time with this great guy."));
+end
+
+
+rule "Here's what you do: get him a Holiday 4-Pack, then get yourself a 10-Pack and passive-aggressively demonstrate your newfound superiority."
+    when
+      q: Question(quest:question, question.equals("Here's what you do: get him a Holiday 4-Pack, then get yourself a 10-Pack and passive-aggressively demonstrate your newfound superiority."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Here's what you do: get him a Holiday 4-Pack, then get yourself a 10-Pack and passive-aggressively demonstrate your newfound superiority. answer: Done"
+    when
+      a: Answer( question.question.equals("Here's what you do: get him a Holiday 4-Pack, then get yourself a 10-Pack and passive-aggressively demonstrate your newfound superiority."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "You have the best older brother ever! Get a pair of Holiday 4-Packs and enjoy some quality time with this great guy."
+    when
+      q: Question(quest:question, question.equals("You have the best older brother ever! Get a pair of Holiday 4-Packs and enjoy some quality time with this great guy."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "You have the best older brother ever! Get a pair of Holiday 4-Packs and enjoy some quality time with this great guy. answer: Done"
+    when
+      a: Answer( question.question.equals("You have the best older brother ever! Get a pair of Holiday 4-Packs and enjoy some quality time with this great guy."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"
+    when
+      q: Question(quest:question, question.equals("Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"))
+   then
+       Object[] options = { "Last Christmas- He drank too much eggnog and passed out on the couch while watching basketball.", "A couple ago at Thanksgiving_ He ata too much turkey and passed out on the couch while watching football.", "Last week when he invited himself over then passed out on couch while watching Scandal."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Ah, yes, Crazy Uncle Charlie... When was the last time you saw him? answer: Last Christmas- He drank too much eggnog and passed out on the couch while watching basketball."
+    when
+      a: Answer( question.question.equals("Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"), answer.equals("Last Christmas- He drank too much eggnog and passed out on the couch while watching basketball."))
+    then
+      insert(new Question("Get him a Holiday 4-Pack and get him off your couch!"));
+end
+
+
+rule "Ah, yes, Crazy Uncle Charlie... When was the last time you saw him? answer: A couple ago at Thanksgiving_ He ata too much turkey and passed out on the couch while watching football."
+    when
+      a: Answer( question.question.equals("Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"), answer.equals("A couple ago at Thanksgiving_ He ata too much turkey and passed out on the couch while watching football."))
+    then
+      insert(new Question("Get him a Holiday 4-Pack and get him off your couch!"));
+end
+
+
+rule "Ah, yes, Crazy Uncle Charlie... When was the last time you saw him? answer: Last week when he invited himself over then passed out on couch while watching Scandal."
+    when
+      a: Answer( question.question.equals("Ah, yes, Crazy Uncle Charlie... When was the last time you saw him?"), answer.equals("Last week when he invited himself over then passed out on couch while watching Scandal."))
+    then
+      insert(new Question("Get him a Holiday 4-Pack and get him off your couch!"));
+end
+
+
+rule "Get him a Holiday 4-Pack and get him off your couch!"
+    when
+      q: Question(quest:question, question.equals("Get him a Holiday 4-Pack and get him off your couch!"))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Get him a Holiday 4-Pack and get him off your couch! answer: Done"
+    when
+      a: Answer( question.question.equals("Get him a Holiday 4-Pack and get him off your couch!"), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Is this person your boss?"
+    when
+      q: Question(quest:question, question.equals("Is this person your boss?"))
+   then
+       Object[] options = { "Yes", "No"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Is this person your boss? answer: Yes"
+    when
+      a: Answer( question.question.equals("Is this person your boss?"), answer.equals("Yes"))
+    then
+      insert(new Question("Do you like him?"));
+end
+
+
+rule "Is this person your boss? answer: No"
+    when
+      a: Answer( question.question.equals("Is this person your boss?"), answer.equals("No"))
+    then
+      insert(new Question("No need to buy this person a gift. Take the money you would have spent and put it towards a Holiday 4-Pack of your own."));
+end
+
+
+rule "No need to buy this person a gift. Take the money you would have spent and put it towards a Holiday 4-Pack of your own."
+    when
+      q: Question(quest:question, question.equals("No need to buy this person a gift. Take the money you would have spent and put it towards a Holiday 4-Pack of your own."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "No need to buy this person a gift. Take the money you would have spent and put it towards a Holiday 4-Pack of your own. answer: Done"
+    when
+      a: Answer( question.question.equals("No need to buy this person a gift. Take the money you would have spent and put it towards a Holiday 4-Pack of your own."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Do you like him?"
+    when
+      q: Question(quest:question, question.equals("Do you like him?"))
+   then
+       Object[] options = { "Yes", "No"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Do you like him? answer: Yes"
+    when
+      a: Answer( question.question.equals("Do you like him?"), answer.equals("Yes"))
+    then
+      insert(new Question("Get him a Holiday 4-Pack. Can you say \"promotion\"?"));
+end
+
+
+rule "Do you like him? answer: No"
+    when
+      a: Answer( question.question.equals("Do you like him?"), answer.equals("No"))
+    then
+      insert(new Question("Get him a Holiday 4-Pack consisting of 4 weekend, day games and enjoy the extra time he is out of the office."));
+end
+
+
+rule "Get him a Holiday 4-Pack. Can you say \"promotion\"?"
+    when
+      q: Question(quest:question, question.equals("Get him a Holiday 4-Pack. Can you say \"promotion\"?"))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Get him a Holiday 4-Pack. Can you say \"promotion\"? answer: Done"
+    when
+      a: Answer( question.question.equals("Get him a Holiday 4-Pack. Can you say \"promotion\"?"), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Get him a Holiday 4-Pack consisting of 4 weekend, day games and enjoy the extra time he is out of the office."
+    when
+      q: Question(quest:question, question.equals("Get him a Holiday 4-Pack consisting of 4 weekend, day games and enjoy the extra time he is out of the office."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Get him a Holiday 4-Pack consisting of 4 weekend, day games and enjoy the extra time he is out of the office. answer: Done"
+    when
+      a: Answer( question.question.equals("Get him a Holiday 4-Pack consisting of 4 weekend, day games and enjoy the extra time he is out of the office."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft?"
+    when
+      q: Question(quest:question, question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"))
+   then
+       Object[] options = { "Wife", "Girlfriend", "Mom", "Mother-in-law", "Sister", "Co-worker"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Wife"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Wife"))
+    then
+      insert(new Question("Is your wife a Brewers fan?"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Girlfriend"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Girlfriend"))
+    then
+      insert(new Question("Is your girlfriend a Brewers fan?"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Mom"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Mom"))
+    then
+      insert(new Question("Is your mom a Brewers fan?"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Mother-in-law"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Mother-in-law"))
+    then
+      insert(new Question("What does she really want for holiday?"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Sister"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Sister"))
+    then
+      insert(new Question("Is your sister older or younger?"));
+end
+
+
+rule "Let-s face it, you are i trouble. Why are you buying her a gitft? answer: Co-worker"
+    when
+      a: Answer( question.question.equals("Let-s face it, you are i trouble. Why are you buying her a gitft?"), answer.equals("Co-worker"))
+    then
+      insert(new Question("Do you know anything about this person?"));
+end
+
+
+rule "Is your wife a Brewers fan?"
+    when
+      q: Question(quest:question, question.equals("Is your wife a Brewers fan?"))
+   then
+       Object[] options = { "Yes", "Not yet"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Is your wife a Brewers fan? answer: Yes"
+    when
+      a: Answer( question.question.equals("Is your wife a Brewers fan?"), answer.equals("Yes"))
+    then
+      insert(new Question("You have found yourself a true life partner. Get him a Holiday 4-Pack as a sign of your gratitude"));
+end
+
+
+rule "Is your wife a Brewers fan? answer: Not yet"
+    when
+      a: Answer( question.question.equals("Is your wife a Brewers fan?"), answer.equals("Not yet"))
+    then
+      insert(new Question("That's unfortunate, but she'll come around. Have you considered buying her clothes?"));
+end
+
+
+rule "You have found yourself a true life partner. Get him a Holiday 4-Pack as a sign of your gratitude"
+    when
+      q: Question(quest:question, question.equals("You have found yourself a true life partner. Get him a Holiday 4-Pack as a sign of your gratitude"))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "You have found yourself a true life partner. Get him a Holiday 4-Pack as a sign of your gratitude answer: Done"
+    when
+      a: Answer( question.question.equals("You have found yourself a true life partner. Get him a Holiday 4-Pack as a sign of your gratitude"), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "That's unfortunate, but she'll come around. Have you considered buying her clothes?"
+    when
+      q: Question(quest:question, question.equals("That's unfortunate, but she'll come around. Have you considered buying her clothes?"))
+   then
+       Object[] options = { "Yes", "No"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "That's unfortunate, but she'll come around. Have you considered buying her clothes? answer: Yes"
+    when
+      a: Answer( question.question.equals("That's unfortunate, but she'll come around. Have you considered buying her clothes?"), answer.equals("Yes"))
+    then
+      insert(new Question("Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size?"));
+end
+
+
+rule "That's unfortunate, but she'll come around. Have you considered buying her clothes? answer: No"
+    when
+      a: Answer( question.question.equals("That's unfortunate, but she'll come around. Have you considered buying her clothes?"), answer.equals("No"))
+    then
+      insert(new Question("Good decision. You know your limitations. Get her a Holiday 4-Pack and spend your next few weekends watching college football instead of braving shopping malls only to get her a shirt she will return anyway."));
+end
+
+
+rule "Good decision. You know your limitations. Get her a Holiday 4-Pack and spend your next few weekends watching college football instead of braving shopping malls only to get her a shirt she will return anyway."
+    when
+      q: Question(quest:question, question.equals("Good decision. You know your limitations. Get her a Holiday 4-Pack and spend your next few weekends watching college football instead of braving shopping malls only to get her a shirt she will return anyway."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Good decision. You know your limitations. Get her a Holiday 4-Pack and spend your next few weekends watching college football instead of braving shopping malls only to get her a shirt she will return anyway. answer: Done"
+    when
+      a: Answer( question.question.equals("Good decision. You know your limitations. Get her a Holiday 4-Pack and spend your next few weekends watching college football instead of braving shopping malls only to get her a shirt she will return anyway."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size?"
+    when
+      q: Question(quest:question, question.equals("Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size?"))
+   then
+       Object[] options = { "Not a Chance", "Sure. I'm a size 36 so she's probably like a 32."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size? answer: Not a Chance"
+    when
+      a: Answer( question.question.equals("Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size?"), answer.equals("Not a Chance"))
+    then
+      insert(new Question("Time to pull the plug on this little experiment and just get her a Holiday 4-Pack."));
+end
+
+
+rule "Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size? answer: Sure. I'm a size 36 so she's probably like a 32."
+    when
+      a: Answer( question.question.equals("Really? You should know by now that  no woman actually wants a man picking out her clothes. Do you know her size?"), answer.equals("Sure. I'm a size 36 so she's probably like a 32."))
+    then
+      insert(new Question("Oh boy, just get her the Holiday 4-Pack. Trust us, you'll thanks us later."));
+end
+
+
+rule "Time to pull the plug on this little experiment and just get her a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("Time to pull the plug on this little experiment and just get her a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Time to pull the plug on this little experiment and just get her a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("Time to pull the plug on this little experiment and just get her a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Oh boy, just get her the Holiday 4-Pack. Trust us, you'll thanks us later."
+    when
+      q: Question(quest:question, question.equals("Oh boy, just get her the Holiday 4-Pack. Trust us, you'll thanks us later."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Oh boy, just get her the Holiday 4-Pack. Trust us, you'll thanks us later. answer: Done"
+    when
+      a: Answer( question.question.equals("Oh boy, just get her the Holiday 4-Pack. Trust us, you'll thanks us later."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Is your girlfriend a Brewers fan?"
+    when
+      q: Question(quest:question, question.equals("Is your girlfriend a Brewers fan?"))
+   then
+       Object[] options = { "Yes", "Not yet"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Is your girlfriend a Brewers fan? answer: Yes"
+    when
+      a: Answer( question.question.equals("Is your girlfriend a Brewers fan?"), answer.equals("Yes"))
+    then
+      insert(new Question("Nice, Bro! Get her a Holiday 4-Pack to  make sure you don't screw this up."));
+end
+
+
+rule "Is your girlfriend a Brewers fan? answer: Not yet"
+    when
+      a: Answer( question.question.equals("Is your girlfriend a Brewers fan?"), answer.equals("Not yet"))
+    then
+      insert(new Question("Dump her. But first give her a Holiday 4-Pack to soften the blow."));
+end
+
+
+rule "Nice, Bro! Get her a Holiday 4-Pack to  make sure you don't screw this up."
+    when
+      q: Question(quest:question, question.equals("Nice, Bro! Get her a Holiday 4-Pack to  make sure you don't screw this up."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Nice, Bro! Get her a Holiday 4-Pack to  make sure you don't screw this up. answer: Done"
+    when
+      a: Answer( question.question.equals("Nice, Bro! Get her a Holiday 4-Pack to  make sure you don't screw this up."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Dump her. But first give her a Holiday 4-Pack to soften the blow."
+    when
+      q: Question(quest:question, question.equals("Dump her. But first give her a Holiday 4-Pack to soften the blow."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Dump her. But first give her a Holiday 4-Pack to soften the blow. answer: Done"
+    when
+      a: Answer( question.question.equals("Dump her. But first give her a Holiday 4-Pack to soften the blow."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Is your mom a Brewers fan?"
+    when
+      q: Question(quest:question, question.equals("Is your mom a Brewers fan?"))
+   then
+       Object[] options = { "Yes", "She's not really in to sports"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Is your mom a Brewers fan? answer: Yes"
+    when
+      a: Answer( question.question.equals("Is your mom a Brewers fan?"), answer.equals("Yes"))
+    then
+      insert(new Question("Obviously you got your brains form your mother. Earn the title of \"favorite child\" by getting her a Holiday 4-Pack."));
+end
+
+
+rule "Is your mom a Brewers fan? answer: She's not really in to sports"
+    when
+      a: Answer( question.question.equals("Is your mom a Brewers fan?"), answer.equals("She's not really in to sports"))
+    then
+      insert(new Question("What else does she like?"));
+end
+
+
+rule "Obviously you got your brains form your mother. Earn the title of \"favorite child\" by getting her a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("Obviously you got your brains form your mother. Earn the title of \"favorite child\" by getting her a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Obviously you got your brains form your mother. Earn the title of \"favorite child\" by getting her a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("Obviously you got your brains form your mother. Earn the title of \"favorite child\" by getting her a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "What else does she like?"
+    when
+      q: Question(quest:question, question.equals("What else does she like?"))
+   then
+       Object[] options = { "A fun day/night out.", "Quality time with family/friend.", "Delicious food and drink", "Collecting holiday ornaments"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "What else does she like? answer: A fun day/night out."
+    when
+      a: Answer( question.question.equals("What else does she like?"), answer.equals("A fun day/night out."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "What else does she like? answer: Quality time with family/friend."
+    when
+      a: Answer( question.question.equals("What else does she like?"), answer.equals("Quality time with family/friend."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "What else does she like? answer: Delicious food and drink"
+    when
+      a: Answer( question.question.equals("What else does she like?"), answer.equals("Delicious food and drink"))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "What else does she like? answer: Collecting holiday ornaments"
+    when
+      a: Answer( question.question.equals("What else does she like?"), answer.equals("Collecting holiday ornaments"))
+    then
+      insert(new Question("Perfect! You get a free Bernie Brewer with every pair of holiday 4-Packs you buy."));
+end
+
+
+rule "Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."
+    when
+      q: Question(quest:question, question.equals("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park. answer: Done"
+    when
+      a: Answer( question.question.equals("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Perfect! You get a free Bernie Brewer with every pair of holiday 4-Packs you buy."
+    when
+      q: Question(quest:question, question.equals("Perfect! You get a free Bernie Brewer with every pair of holiday 4-Packs you buy."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Perfect! You get a free Bernie Brewer with every pair of holiday 4-Packs you buy. answer: Done"
+    when
+      a: Answer( question.question.equals("Perfect! You get a free Bernie Brewer with every pair of holiday 4-Packs you buy."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "What does she really want for holiday?"
+    when
+      q: Question(quest:question, question.equals("What does she really want for holiday?"))
+   then
+       Object[] options = { "Fruit cake", "A 'Home is Where the Heart Is' Plaque", "Hand-knit sweater for her lap dog", "one of these creepy posters where the kids are dressed up like adults"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "What does she really want for holiday? answer: Fruit cake"
+    when
+      a: Answer( question.question.equals("What does she really want for holiday?"), answer.equals("Fruit cake"))
+    then
+      insert(new Question("Have you ever actually tried fruitcake? Nobody like that stuff."));
+end
+
+
+rule "What does she really want for holiday? answer: A 'Home is Where the Heart Is' Plaque"
+    when
+      a: Answer( question.question.equals("What does she really want for holiday?"), answer.equals("A 'Home is Where the Heart Is' Plaque"))
+    then
+      insert(new Question("As if she doesn't already have enough of those..."));
+end
+
+
+rule "What does she really want for holiday? answer: Hand-knit sweater for her lap dog"
+    when
+      a: Answer( question.question.equals("What does she really want for holiday?"), answer.equals("Hand-knit sweater for her lap dog"))
+    then
+      insert(new Question("We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes."));
+end
+
+
+rule "What does she really want for holiday? answer: one of these creepy posters where the kids are dressed up like adults"
+    when
+      a: Answer( question.question.equals("What does she really want for holiday?"), answer.equals("one of these creepy posters where the kids are dressed up like adults"))
+    then
+      insert(new Question("Do you really want to endure the strange looks you will get when you buy this?"));
+end
+
+
+rule "Have you ever actually tried fruitcake? Nobody like that stuff."
+    when
+      q: Question(quest:question, question.equals("Have you ever actually tried fruitcake? Nobody like that stuff."))
+   then
+       Object[] options = { "For just a minute, forget about what she wants...", "You'd better keep thinking... She's still mad at you for ruining Christmas last year."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Have you ever actually tried fruitcake? Nobody like that stuff. answer: For just a minute, forget about what she wants..."
+    when
+      a: Answer( question.question.equals("Have you ever actually tried fruitcake? Nobody like that stuff."), answer.equals("For just a minute, forget about what she wants..."))
+    then
+      insert(new Question("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."));
+end
+
+
+rule "Have you ever actually tried fruitcake? Nobody like that stuff. answer: You'd better keep thinking... She's still mad at you for ruining Christmas last year."
+    when
+      a: Answer( question.question.equals("Have you ever actually tried fruitcake? Nobody like that stuff."), answer.equals("You'd better keep thinking... She's still mad at you for ruining Christmas last year."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "As if she doesn't already have enough of those..."
+    when
+      q: Question(quest:question, question.equals("As if she doesn't already have enough of those..."))
+   then
+       Object[] options = { "For just a minute, forget about what she wants...", "You'd better keep thinking... She's still mad at you for ruining Christmas last year."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "As if she doesn't already have enough of those... answer: For just a minute, forget about what she wants..."
+    when
+      a: Answer( question.question.equals("As if she doesn't already have enough of those..."), answer.equals("For just a minute, forget about what she wants..."))
+    then
+      insert(new Question("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."));
+end
+
+
+rule "As if she doesn't already have enough of those... answer: You'd better keep thinking... She's still mad at you for ruining Christmas last year."
+    when
+      a: Answer( question.question.equals("As if she doesn't already have enough of those..."), answer.equals("You'd better keep thinking... She's still mad at you for ruining Christmas last year."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes."
+    when
+      q: Question(quest:question, question.equals("We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes."))
+   then
+       Object[] options = { "For just a minute, forget about what she wants...", "You'd better keep thinking... She's still mad at you for ruining Christmas last year."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes. answer: For just a minute, forget about what she wants..."
+    when
+      a: Answer( question.question.equals("We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes."), answer.equals("For just a minute, forget about what she wants..."))
+    then
+      insert(new Question("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."));
+end
+
+
+rule "We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes. answer: You'd better keep thinking... She's still mad at you for ruining Christmas last year."
+    when
+      a: Answer( question.question.equals("We both know how much you hae hand-knit sweater. And lap dogs. And dogs in human clothes."), answer.equals("You'd better keep thinking... She's still mad at you for ruining Christmas last year."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "Do you really want to endure the strange looks you will get when you buy this?"
+    when
+      q: Question(quest:question, question.equals("Do you really want to endure the strange looks you will get when you buy this?"))
+   then
+       Object[] options = { "For just a minute, forget about what she wants...", "You'd better keep thinking... She's still mad at you for ruining Christmas last year."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Do you really want to endure the strange looks you will get when you buy this? answer: For just a minute, forget about what she wants..."
+    when
+      a: Answer( question.question.equals("Do you really want to endure the strange looks you will get when you buy this?"), answer.equals("For just a minute, forget about what she wants..."))
+    then
+      insert(new Question("AH HA! Get her a gift you wil not be ashamed to buy - like a Holiday 4-Pack."));
+end
+
+
+rule "Do you really want to endure the strange looks you will get when you buy this? answer: You'd better keep thinking... She's still mad at you for ruining Christmas last year."
+    when
+      a: Answer( question.question.equals("Do you really want to endure the strange looks you will get when you buy this?"), answer.equals("You'd better keep thinking... She's still mad at you for ruining Christmas last year."))
+    then
+      insert(new Question("Well that was easy... Get her a Holiday 4-Pack. She can enjoy all those things at Miller Park."));
+end
+
+
+rule "Is your sister older or younger?"
+    when
+      q: Question(quest:question, question.equals("Is your sister older or younger?"))
+   then
+       Object[] options = { "Older", "Younger"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Is your sister older or younger? answer: Older"
+    when
+      a: Answer( question.question.equals("Is your sister older or younger?"), answer.equals("Older"))
+    then
+      insert(new Question("The woman probably changed your diapers when you diapers when were a baby. You owe her BIG TIME. Get her a Holiday 4-Pack."));
+end
+
+
+rule "Is your sister older or younger? answer: Younger"
+    when
+      a: Answer( question.question.equals("Is your sister older or younger?"), answer.equals("Younger"))
+    then
+      insert(new Question("Was she spoiled as a child?"));
+end
+
+
+rule "The woman probably changed your diapers when you diapers when were a baby. You owe her BIG TIME. Get her a Holiday 4-Pack."
+    when
+      q: Question(quest:question, question.equals("The woman probably changed your diapers when you diapers when were a baby. You owe her BIG TIME. Get her a Holiday 4-Pack."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "The woman probably changed your diapers when you diapers when were a baby. You owe her BIG TIME. Get her a Holiday 4-Pack. answer: Done"
+    when
+      a: Answer( question.question.equals("The woman probably changed your diapers when you diapers when were a baby. You owe her BIG TIME. Get her a Holiday 4-Pack."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "Was she spoiled as a child?"
+    when
+      q: Question(quest:question, question.equals("Was she spoiled as a child?"))
+   then
+       Object[] options = { "No, she was adorable!", "Got everything she ever wanted. One Christmas, she got a pony. The best thing I fit that year was a pack of new socks."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Was she spoiled as a child? answer: No, she was adorable!"
+    when
+      a: Answer( question.question.equals("Was she spoiled as a child?"), answer.equals("No, she was adorable!"))
+    then
+      insert(new Question("You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make."));
+end
+
+
+rule "Was she spoiled as a child? answer: Got everything she ever wanted. One Christmas, she got a pony. The best thing I fit that year was a pack of new socks."
+    when
+      a: Answer( question.question.equals("Was she spoiled as a child?"), answer.equals("Got everything she ever wanted. One Christmas, she got a pony. The best thing I fit that year was a pack of new socks."))
+    then
+      insert(new Question("You're still dwelling on this?"));
+end
+
+
+rule "You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make."
+    when
+      q: Question(quest:question, question.equals("You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make. answer: Done"
+    when
+      a: Answer( question.question.equals("You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+
+rule "You're still dwelling on this?"
+    when
+      q: Question(quest:question, question.equals("You're still dwelling on this?"))
+   then
+       Object[] options = { "Yes", "No"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "You're still dwelling on this? answer: Yes"
+    when
+      a: Answer( question.question.equals("You're still dwelling on this?"), answer.equals("Yes"))
+    then
+      insert(new Question("You're still dwelling on this?"));
+end
+
+
+rule "You're still dwelling on this? answer: No"
+    when
+      a: Answer( question.question.equals("You're still dwelling on this?"), answer.equals("No"))
+    then
+      insert(new Question("Time to start fresh. Is the season for giving and forgiving."));
+end
+
+
+rule "Time to start fresh. Is the season for giving and forgiving."
+    when
+      q: Question(quest:question, question.equals("Time to start fresh. Is the season for giving and forgiving."))
+   then
+       Object[] options = { "Ok"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Time to start fresh. Is the season for giving and forgiving. answer: Ok"
+    when
+      a: Answer( question.question.equals("Time to start fresh. Is the season for giving and forgiving."), answer.equals("Ok"))
+    then
+      insert(new Question("You know you can't wait to see her face light up when she opens that Holiday 4-Pack. Just think of the memories you'll make."));
+end
+
+
+rule "Do you know anything about this person?"
+    when
+      q: Question(quest:question, question.equals("Do you know anything about this person?"))
+   then
+       Object[] options = { "I think she has a cat.", "Nope. Drew her name out of hat for Secret Santa."};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Do you know anything about this person? answer: I think she has a cat."
+    when
+      a: Answer( question.question.equals("Do you know anything about this person?"), answer.equals("I think she has a cat."))
+    then
+      insert(new Question("Get him a Holiday 4-Pack. You can never go wrong with that."));
+end
+
+
+rule "Do you know anything about this person? answer: Nope. Drew her name out of hat for Secret Santa."
+    when
+      a: Answer( question.question.equals("Do you know anything about this person?"), answer.equals("Nope. Drew her name out of hat for Secret Santa."))
+    then
+      insert(new Question("Get him a Holiday 4-Pack. You can never go wrong with that."));
+end
+
+
+rule "Get him a Holiday 4-Pack. You can never go wrong with that."
+    when
+      q: Question(quest:question, question.equals("Get him a Holiday 4-Pack. You can never go wrong with that."))
+   then
+       Object[] options = { "Done"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Get him a Holiday 4-Pack. You can never go wrong with that. answer: Done"
+    when
+      a: Answer( question.question.equals("Get him a Holiday 4-Pack. You can never go wrong with that."), answer.equals("Done"))
+    then
+      insert(new Question("Done"));
+end
+
+rule "Done"
+    when
+      q: Question(quest:question, question.equals("Done"))
+   then
+       Object[] options = { "Next try?", "Goodbye"};
+       String answer=ask(quest, options);
+       insert(new Answer(q, answer));
+end
+
+
+rule "Done answer: Next try?"
+    when
+      a: Answer( question.question.equals("Done"), answer.equals("Next try?"))
+    then
+      insert(new Question("What is the gender of the person receiving your gift?"));
+end
+
+
+rule "Done answer: Goodbye"
+    when
+      a: Answer( question.question.equals("Done"), answer.equals("Goodbye"))
+    then
+      insert(new Question("Exit"));
+end
